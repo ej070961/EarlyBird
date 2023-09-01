@@ -13,8 +13,8 @@ function RegisterPage() {
 
     const [Visible, setVisible] = useState(false);
     const [UserName, setUserName] = useState();
-    const [Nickname, setNickname] = useState();
-    const [phoneNumber, setPhoneNumber] = useState();
+    const [Nickname, setNickname] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
     const [Email, setEmail] = useState();
     const [Uid, setUid] = useState();
 
@@ -47,17 +47,19 @@ function RegisterPage() {
                 setPhoneNumber(value);
                 break;
             default:
-            break;
+                break;
         }
     }; 
 
+
     const onsubmit = (e) => {
 
-        let variable = {UserName: UserName, Email: Email, Nickname: Nickname, PhoneNumber: phoneNumber, Uid: Uid}
+        let variable = {UserName: UserName, Email: Email, Nickname: Nickname, PhoneNumber: phoneNumber, Uid: Uid, Image:"", IntroMessage: ""};
 
         dispatch(registerUser(variable))
             .then((response)=>{
                 if(response.payload == "success"){
+                    alert('회원가입이 완료되었습니다');
                     navigate('/')
                 }else{
                     alert("Failed to sign up")
@@ -67,45 +69,41 @@ function RegisterPage() {
       
     }
 
-    const RegisterForm = () =>{
-        
-        return <RegisterFormLayout>
-        <p style={{marginTop: '1.1rem'}}>SIGN UP TO START</p>
-            <div style={{display: 'flex', flexDirection: 'inline', justifyContent: 'space-between'}}>
-            <div>
-            <InputBox>
-            <label>이메일</label>
-            <input type="text" name="email" value={Email} readOnly={true}/>
-            </InputBox>
-            <InputBox>
-            <label>이름</label>
-            <input type="text"name="name" value={UserName} readOnly={true} />
-            </InputBox>
-            </div>
-            <div>
-            <InputBox>
-            <label>닉네임</label>
-            <input type="text" name="nickname" value={Nickname} onChange={handleChange} />
-            </InputBox>
-            <InputBox>
-            <label>전화번호</label>
-            <input type="text" name="phonenumber" value={phoneNumber} onChange={handleChange} />
-            </InputBox>
-            </div>
-            </div>
-            <SubmitButton onClick={onsubmit}>Submit</SubmitButton>
-        </RegisterFormLayout>
-        
-
-    }
 
     return (
         <RegisterLayout>
-            <p>WELCOME</p>
-            <p>TO</p>
+            <span>WELCOME</span>
+            <span>TO</span>
             <h1>EARLY BIRD</h1>
-            
-            {Visible ? <RegisterForm/>: 
+   
+            {Visible ? 
+             <RegisterFormLayout>
+             <p style={{marginTop: '1.1rem'}}>SIGN UP TO START</p>
+                 <div style={{display: 'flex', flexDirection: 'inline', justifyContent: 'space-between'}}>
+                 <div>
+                 <InputBox>
+                 <label>이메일</label>
+                 <input type="text" name="email" value={Email} readOnly/>
+                 </InputBox>
+                 <InputBox>
+                 <label>이름</label>
+                 <input type="text"name="name" value={UserName} readOnly />
+                 </InputBox>
+                 </div>
+                 <div>
+                 <InputBox>
+                     <label>닉네임</label>
+                     <input type="text" name="nickname" value={Nickname} onChange={handleChange} />
+                 </InputBox>
+                 <InputBox>
+                     <label>전화번호</label>
+                     <input type="text" name="phonenumber" value={phoneNumber} onChange={handleChange} />
+                 </InputBox>
+                 </div>
+                 </div>
+                 <SubmitButton onClick={onsubmit}>Submit</SubmitButton>
+             </RegisterFormLayout>
+             : 
             <RegisterFormLayout>
                 <p style={{marginTop: '1.1rem'}}>SIGN UP TO START</p>
                 <GoogleLoginButton onClick={handleRegister}>
@@ -134,7 +132,7 @@ const RegisterLayout = styled.div`
     flex-direction: column;
     align-items: center;
     
-    p{
+    span{
         color: #FFF;
         font-family: 'SeoulHangang';
         font-size: 25px;
@@ -165,6 +163,7 @@ const RegisterFormLayout = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+ 
 
     p{
         color: #460A9A;
@@ -173,7 +172,7 @@ const RegisterFormLayout = styled.div`
         font-style: normal;
         font-weight: 400;
         line-height: normal;
-        cursor: pointer;
+
 
     }
 
@@ -204,7 +203,7 @@ const InputBox = styled.div`
   margin-bottom: 10px;
   margin-left: 10px;
   width: 96%;
-
+ 
   label{
     font-family: 'SeoulHangang';
     font-style: normal;
@@ -223,7 +222,6 @@ const InputBox = styled.div`
     font-style: normal;
     font-size: 22px;
     padding: 12px;
-    opacity: 0.7;
   }
 
   textarea{

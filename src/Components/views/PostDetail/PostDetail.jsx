@@ -6,18 +6,21 @@ import {firestore} from '../../../firebase';
 import Comment from './Sections/Comment';
 import Auth from '../../../hoc/auth';
 import Likes from './Sections/Likes';
+import PostDeleteButton from './Sections/PostDeleteButton';
 
 
-function PostDetail() {
+function PostDetail(props) {
 
     const postId = useParams().postId; //App.js 라우트 파라미터에 있는 videoId를 가져옴 
     const [PostData, setPostData] = useState([]);
     const [UserData, setUserData] = useState([]);
     const [CommentList, setCommentList] = useState([]);
-
- 
-
+    // const User = useSelector(state => state.User);
+    // const [currentUser, setcurrentUser] =useState();
     useEffect(()=>{
+        // if(User){
+        //   setcurrentUser(User.userData.Uid);
+        // }
         //게시물 정보 가져오기 
         const posts = firestore.collection("posts");
 
@@ -35,7 +38,8 @@ function PostDetail() {
                 .get()
                 .then(userSnapshot=>{
                     const userData = userSnapshot.docs.map(doc=>doc.data())[0];
-                    setUserData(userData);                  
+                    setUserData(userData); 
+                    
                 })
                 .catch(error=>{console.log(error)})
             }
@@ -43,6 +47,7 @@ function PostDetail() {
         .catch(error => {
             console.log(error);
         });
+
 
         //게시물 댓글 정보 가져오기 및 실시간 업데이트 
         const comment = firestore.collection("comments");
@@ -56,7 +61,8 @@ function PostDetail() {
         });
 
      
-    },[]);
+    },[PostData, UserData, postId]);
+
 
     if(PostData){
         return (
@@ -64,15 +70,16 @@ function PostDetail() {
                 <NavBar/>
                 <PostDetailLayout>
                     <PostInfoLayout>
+                    <div style={{ width: '95%', display: 'flex', flexDirection: 'inline', justifyContent: 'space-between', alignItems: 'center'}}>
                         <UserInfoLayout>
-                            {UserData.image? 
-                                <img src={UserData.image} alt='default_profile' height={70} width={70} ></img>
-                                : <img src='/default_profile.png' alt='profile' height={70} width={70} ></img>}
+                            <img src={UserData.Image!==""? UserData.Image:'/default_profile.png' } alt='' height={70} width={70} ></img>
                             <div style={{ display:'flex', flexDirection: 'column'}}>
                                 <p style={{marginLeft: '20px'}}>{UserData.Nickname}</p>
                                 <p style={{marginLeft: '20px'}}>{PostData.Time}</p>
                             </div>
                         </UserInfoLayout>
+                        <PostDeleteButton PostData={PostData} />
+                        </div>
                         <ContentLayout>
                         <p>{PostData.Content}</p>
                         </ContentLayout>
@@ -93,6 +100,7 @@ function PostDetail() {
         )
     }
 }
+export default Auth(PostDetail,true);
 const PostDetailLayout = styled.div`
     width: 100%;
     height: 100%;
@@ -173,4 +181,3 @@ const CommentLayout = styled.div`
         margin-right: 0;
       }
 `
-export default Auth(PostDetail, true);

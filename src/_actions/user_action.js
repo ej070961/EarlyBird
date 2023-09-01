@@ -6,7 +6,7 @@ import{
 
 export function registerUser(dataToSubmit){
     const users = firestore.collection("users");
-    const result = users.doc()
+    const result = users.doc(dataToSubmit.Uid)
         .set(dataToSubmit)
         .then( res =>{
             return "success"
@@ -48,28 +48,53 @@ export function loginUser(dataToSubmit){
     }
 }
 
-export function authUser(uid){
+// export function authUser(uid){
   
-    const users = firestore.collection("users");
+//     const users = firestore.collection("users");
 
-    // Query the collection for the user's id
-    const result = users.where("Uid", "==", uid)
-    .get()
-    .then(snapshot => {
-        if (snapshot.size > 0) {    
-           const userDoc = snapshot.docs[0].data() //사용자 정보 가져오기
-           return userDoc;
-        }else{
-            console.log("User not found.");
-        }
-    })
-    .catch(error => {
-    console.log(error);
-    });
+//     // Query the collection for the user's id
+//     users.where("Uid", "==", uid)
+//     .get()
+//     .then(snapshot => {
+//         if (snapshot.size > 0) {    
+//             const result = snapshot.docs.map(doc => doc.data())[0]; //배열 대신 객체로 업데이트
+//             return{
+//                 type: AUTH_USER,
+//                 payload: result
+//             }
+//         }else{
+//             console.log("User not found.");
+//         }
+//     })
+//     .catch(error => {
+//     console.log(error);
+//     });
    
 
-    return{
-        type: AUTH_USER,
-        payload: result
+    
+// }
+export const authUser = (uid) => async (dispatch) => {
+    const users = firestore.collection("users");
+
+    try {
+        console.log("auth action")
+        const snapshot = await users.where("Uid", "==", uid).get();
+
+        if (snapshot.size > 0) {
+            const userDoc = snapshot.docs.map(doc => doc.data())[0];
+            // console.log("User yes")
+            dispatch({
+                type: AUTH_USER,
+                payload: userDoc
+            });
+            return{
+                payload: userDoc
+            }
+        } else {
+            console.log("User not found.");
+        }
+    } catch (error) {
+        console.log(error);
     }
-}
+    
+};

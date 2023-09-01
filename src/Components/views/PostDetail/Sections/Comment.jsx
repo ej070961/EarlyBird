@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {useParams} from 'react-router-dom'
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
@@ -37,9 +37,8 @@ function Comment(props) {
       newCommentRef
         .set(variables)
         .then( res =>{
-           console.log("success")
-           setcommentValue("")
-          //  props.refreshFuncion(variables);
+           console.log("success");
+           setcommentValue("");
             }
         )
         .catch(error => {

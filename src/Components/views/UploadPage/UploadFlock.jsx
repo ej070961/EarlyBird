@@ -2,31 +2,60 @@ import React, {useState} from "react";
 import styled from "styled-components";
 import {firestore} from '../../../firebase'
 import Auth from '../../../hoc/auth'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css"
 
+import { useSelector } from "react-redux";
 function UploadFlock(props) {
     const {onClose} = props;
     const [title, setTitle] = useState('');
-    const [period, setPeriod] = useState('');
+    const [startDate, setstartDate] = useState(new Date());
+    const [endDate, setendDate] = useState(new Date());
     const [numOfPeople, setNumOfPeople] = useState('');
     const [description, setDescription] = useState('');
     const [tags, setTags] = useState(['','','']);
 
-    
+    // const [currentUser, setcurrentUser] = useState();
+
+    const user = useSelector(state=>state.User);
+    const currentUser = user.userData.Uid;
+    // useEffect(()=>{
+    //   if(user && Object.keys(user).length > 0){
+    //     console.log(user);
+    //     setcurrentUser(user.userData);
+    //   }else{
+    //     console.log("No user")
+    //   }
+    // }, [user]);
+  // console.log(user);
     const handleCloseModal = () => {
         onClose(false);
         setTitle('');
-        setPeriod('');
+        // setPeriod('');
         setNumOfPeople('');
         setDescription('');
 
     };
 
     const handleSubmit = () => {
-        console.log({title, period, numOfPeople, description, tags});
+        console.log({title, startDate, endDate, numOfPeople, description, tags});
 
-        const flock = firestore.collection("flock");
-        flock.doc("post")
-        .set({name: 'eunji', title: title, period: period, numOfPeople: numOfPeople, description: description, tags: tags})
+        
+        const flock = firestore.collection("flock").doc();
+
+        let variable = {
+          Uid: currentUser,
+          FlockId: flock.id,
+          Title: title,
+          StartDate: startDate,
+          EndDate: endDate,
+          NumOfPeple: numOfPeople,
+          Description: description,
+          Tags: tags
+
+        }
+        flock
+        .set(variable)
         .then( res=>{
           console.log('success');
         }
@@ -44,8 +73,11 @@ function UploadFlock(props) {
             case 'title':
               setTitle(value);
             break;
-            case 'period':
-              setPeriod(value);
+            case 'startdate':
+              setstartDate(value);
+            break;
+            case 'enddate':
+              setendDate(value);
             break;
             case 'numOfPeople':
               const onlyNumber = value.replace(/[^0-9]/g, '')
@@ -88,14 +120,13 @@ function UploadFlock(props) {
                 </InputBox>
                 <div style={{ display:'flex', flexDirection: 'inline', justifyContent: 'space-between'}}>
                 <InputBox>
-                  <label>Period</label>
-                  <input
-                    type="text"
-                    name="period"
-                    placeholder="활동기간을 입력하세요"
-                    value={period}
-                    onChange={handleChange}
-                  />
+                  <label>Start date</label>
+                  <DatePicker showIcon name="startdate" selected={startDate} onChange={date => setstartDate(date)} />
+                </InputBox>
+              
+                <InputBox>
+                  <label>End date</label>
+                  <DatePicker showIcon name="enddate" selected={endDate} onChange={date => setendDate(date)} />
                 </InputBox>
                 <InputBox>
                   <label>Num of people</label>
@@ -120,7 +151,7 @@ function UploadFlock(props) {
                   />
                 </InputBox>
       
-                <div style={{margin:'1rem'}}>
+                <div style={{display: 'flex', flexDirection: 'inline'}}>
 
                 <TagLabel>태그달기 :</TagLabel>
                 {tags.map((tag, index) => (
@@ -132,12 +163,11 @@ function UploadFlock(props) {
                     />
                   ))}
 
-              </div>
-
-      <ButtonBox>
-        <button type="submit" onClick={handleSubmit}>등록</button>
-        <button type="cancel" onClick={handleCloseModal}>취소</button>
-      </ButtonBox>
+         
+                  <ButtonBox type="submit" onClick={handleSubmit}>등록</ButtonBox>
+                  <ButtonBox type="cancel" onClick={handleCloseModal}>취소</ButtonBox>
+          
+               </div>
       </div>
       
     </ModalLayout>
@@ -149,8 +179,8 @@ const ModalLayout = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 700px;
-  height: 710px;
+  width: 600px;
+  height: 610px;
   background: #FFFFFF;
   border-radius: 30px;
   border: 2px solid rgba(0, 0, 0, 0.5);
@@ -166,7 +196,7 @@ const UploadSpan = styled.span`
   top: 3%;
   font-family: 'SeoulHangang';
   font-style: normal;
-  font-size: 45px;
+  font-size: 40px;
   text-align: center;
   color: #460A9A;
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -184,14 +214,14 @@ const Line = styled.hr`
 const InputBox = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
   margin-left: 10px;
 
   label{
     font-family: 'SeoulHangang';
     width: 100%%;
     font-style: normal;
-    font-size: 25px;
+    font-size: 22px;
     color: #460A9A;
     margin-bottom: 5px;
   }
@@ -200,13 +230,14 @@ const InputBox = styled.div`
     box-sizing: border-box;
     width: 100%;
     background: #FFFFFF;
+    height: 3rem;
     opacity: 0.8;
     border: 3px solid #460A9A;
     border-radius: 20px;
     font-family: 'SeoulHangang';
     font-style: normal;
-    font-size: 22px;
-    padding: 15px;
+    font-size: 20px;
+    padding: 10px;
     opacity: 0.7;
   }
 
@@ -220,7 +251,7 @@ const InputBox = styled.div`
     font-family: 'SeoulHangang';
     font-style: normal;
     font-size: 22px;
-    padding: 40px;
+    padding: 30px;
     opacity: 0.7;
 
   }
@@ -229,39 +260,35 @@ const InputBox = styled.div`
 const TagLabel = styled.label`
   font-family: 'SeoulHangang';
   font-weight: 400;
-  font-size: 25px;
+  font-size: 20px;
   color: #460A9A;
 `;
 
 const TagInput = styled.input`
   box-sizing: border-box;
-  width: 100px;
-  height: 50px;
+  width: 80px;
+  height: 40px;
   margin-left: 5px;
   background: #B39DDB;
   border: 3px solid #B39DDB;
   border-radius: 20px;
 `;
 
-const ButtonBox = styled.div`
-  display: flex;
-  flex-direction: 'inline';
-  justify-content: flex-end;
+const ButtonBox = styled.button`
 
-  button{
     box-sizing: border-box;
-    width: 90px;
+    width: 80px;
     height: 40px;
     background: #460A9A;
     border: 3px solid #460A9A;
     border-radius: 10px;
     font-family: 'SeoulHangang';
     font-style: normal;
-    font-size: 25px;
+    font-size: 22px;
     color: #FFFFFF;
-    margin-right: 8px;
+    margin-right: 5px;
     margin-top: 5px;
-  }
+  
 
   @media (max-width: 768px) {
     width: 100%;

@@ -48,16 +48,13 @@ function SingleComment(props) {
     return <div key={comment.commentId}>
       <div style={{ width: '95%', display: 'flex', flexDirection: 'inline', justifyContent: 'space-between', alignItems: 'center'}}>
         <UserInfoLayout>
-          {UserData.image? 
-            <img src={UserData.image} alt='default_profile' height={40} width={40} ></img>
-            : <img src='/default_profile.png' alt='profile' height={40} width={40} ></img>}
+            <img src={UserData.Image!==""? UserData.Image:'/default_profile.png' } alt='' height={40} width={40} ></img>
             <div style={{ display:'flex', flexDirection: 'column'}}>
                 <p style={{marginLeft: '10px'}}>{UserData.Nickname}</p>
                 <p style={{marginLeft: '10px'}}>{Time}</p>
             </div>
         </UserInfoLayout>
         <CommentMenu PostData={PostData} comment={comment}/>
-       
     </div>
     <ContentLayout>
       <p>{comment.content}</p>

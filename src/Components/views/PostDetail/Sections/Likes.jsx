@@ -195,4 +195,4 @@ const LikeButton = styled.div`
     }
 `
 
-export default Auth(Likes, true);
+export default Likes;

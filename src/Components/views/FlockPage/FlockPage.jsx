@@ -8,6 +8,8 @@ import Auth from '../../../hoc/auth'
 
 function FlockPage() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  
   
    return(
     <div>
@@ -20,6 +22,7 @@ function FlockPage() {
         {modalIsOpen && <UploadFlock onClose={setModalIsOpen} />}
       </FlockContentRow>
       <div style={{paddingTop:'60px', paddingLeft: '120px', paddingRight: '120px'}}>
+    
         <ItemList></ItemList>
       </div>
       

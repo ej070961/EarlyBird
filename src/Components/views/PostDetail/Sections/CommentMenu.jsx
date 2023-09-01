@@ -9,7 +9,8 @@ function CommentMenu(props) {
   const PostData = props.PostData;
   const [view, setView] = useState(false);
 
-  const deleteComment = () =>{
+  const deleteComment = (e) =>{
+    
     const comments = firestore.collection("comments");
 
     comments.doc(`${comment.CommentId}`)
@@ -22,23 +23,19 @@ function CommentMenu(props) {
         console.log(error)
     })
   }
-  const DeleteDropdown = () => {
-    return (
-      <DropdownLayout>
-        <li onClick={deleteComment}>삭제</li>
-      </DropdownLayout>
-    );
-  };
-
+ 
   if (comment.Uid === currentUser || PostData.Uid === currentUser) {
-    console.log('Yes');
     return (
+      <div>
       <MenuContainer>
         <MenuButton onClick={() => setView(!view)}>
-          <img src='/menu.svg' height={20} />
+          <img src='/menu.svg'alt="" height={20} />
         </MenuButton>
-        {view && <DeleteDropdown />}
+        {view && <DropdownLayout>
+          <li onClick={deleteComment}>삭제</li>
+        </DropdownLayout>}
       </MenuContainer>
+      </div>
     );
   } else {
     return null;
@@ -60,7 +57,7 @@ const DropdownLayout = styled.div`
   position: absolute;
   width: 33px;
   height: 24px;
-  top: 30px; /* 조정하여 원하는 위치로 변경 */
+  top: 30px; 
   background: #FFF;
 
   li {

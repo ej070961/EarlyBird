@@ -6,6 +6,7 @@ import LoginPage from "./Components/views/LoginPage/LoginPage";
 import RegisterPage from "./Components/views/RegisterPage/RegisterPage";
 import MyPage from "./Components/views/MyPage/MyPage";
 import PostDetail from "./Components/views/PostDetail/PostDetail";
+
 function App() {
   return (
     <BrowserRouter>
@@ -16,6 +17,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/my-page" element={<MyPage />} />
           <Route path="/post/:postId" element={<PostDetail/>}/>
+       
         </Routes>
 
     </BrowserRouter>

@@ -1,35 +1,45 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {firestore} from '../../../firebase'
 import { useSelector } from 'react-redux';
-import { useNavigate } from "react-router-dom";
+
 function UploadContent(props) {
     const { onClose } = props;
     const user = useSelector(state => state.User); //리덕스 state에서 user정보를 가져와 user 변수에 담음
     const [Content, setContent] = useState();
-    const [Time, setTime] = useState("00:00:00");
+    const [Time, setTime] = useState("");
 
     const handleCloseModal = () => {
         onClose(false);
     };
 
-    const currentTime = () =>{
-     const date = new Date();
-     const hours = String(date.getHours()).padStart(2,"0");
-     const minutes = String(date.getMinutes()).padStart(2,"0") 
-     const seconds = String(date.getSeconds()).padStart(2,"0")
-     setTime(`${hours}:${minutes}:${seconds}`);
-    };
+    useEffect(()=>{
+      const currentTime = () =>{
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+        const hours =date.getHours();
+        const minutes = date.getMinutes(); 
+   
+        setTime(`${year}.${month+1}.${day}. ${hours}:${minutes}`);
+       };
+
+       return currentTime;
+
+    })
+
+   
 
 
     const handleSubmit = (e) =>{
       e.preventDefault(); //아무것도 안쓰고 submit 버튼 눌렀을 때, 화면이 refresh 되지 않도록 함 
 
-      currentTime();
+      // currentTime(); // currentTime 함수를 먼저 호출해서 Time 상태를 설정
 
-      
-
+      // if(!(Time==="")){
       //파이어스토어에 저장 
+      // currentTime(); // currentTime 함수를 먼저 호출해서 Time 상태를 설정
       const posts = firestore.collection("posts");
       const newPostRef = posts.doc() //무작위로 생성된 문서 ID
 
@@ -52,6 +62,9 @@ function UploadContent(props) {
         .catch(error => {
             console.log(error);
         });
+      // }else{
+      //   console.log("No time")
+      // }
 
     }
 
@@ -64,7 +77,7 @@ function UploadContent(props) {
         <ModalLayout>
         <TitleSpan>Record your morning</TitleSpan>
         <hr/>
-        <img style={{paddingTop: '110px', margin: "0px 27%"}} src={props.ImageURL} width="300" height="300"/>
+        <img style={{paddingTop: '110px', margin: "0px 27%"}} src={props.ImageURL} alt="" width="300" height="300"/>
         <InputBox>
           <label>Content</label>
           <textarea

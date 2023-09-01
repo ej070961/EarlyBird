@@ -9,12 +9,18 @@ import{
 export default function (state = {}, action){
     switch (action.type) {
         case LOGIN_USER:
-        return {...state, loginSuccess: action.payload}
+            return {...state, loginSuccess: action.payload}
         case REGISTER_USER:
-        return {...state, register: action.payload} //state를 똑같이 가져오고, user_actions의 payload를 넣어줌 
+            return {...state, register: action.payload} //state를 똑같이 가져오고, user_actions의 payload를 넣어줌 
         case AUTH_USER:
-        return {...state, userData: action.payload}
+            if (action.payload) {
+                console.log("Yes payload")
+                return { ...state, userData: action.payload };
+            }
+            console.log("no payload")
+            return state; 
+            // return { ...state, userData: action.payload };
         default:
-            return state;
+            return {...state};
     }
 }
