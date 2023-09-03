@@ -19,28 +19,21 @@ function UploadFlock(props) {
 
     const user = useSelector(state=>state.User);
     const currentUser = user.userData.Uid;
-    // useEffect(()=>{
-    //   if(user && Object.keys(user).length > 0){
-    //     console.log(user);
-    //     setcurrentUser(user.userData);
-    //   }else{
-    //     console.log("No user")
-    //   }
-    // }, [user]);
-  // console.log(user);
+
     const handleCloseModal = () => {
         onClose(false);
         setTitle('');
-        // setPeriod('');
+        setstartDate(new Date());
+        setendDate(new Date())
         setNumOfPeople('');
         setDescription('');
 
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
         console.log({title, startDate, endDate, numOfPeople, description, tags});
 
-        
         const flock = firestore.collection("flock").doc();
 
         let variable = {
@@ -58,13 +51,15 @@ function UploadFlock(props) {
         .set(variable)
         .then( res=>{
           console.log('success');
+          handleCloseModal();
+          alert("성공적으로 등록되었습니다")
         }
         )
         .catch(error => {
           console.log(error);
         });
 
-        handleCloseModal();
+   
     }
 
     const handleChange = (e) => {
@@ -272,6 +267,9 @@ const TagInput = styled.input`
   background: #B39DDB;
   border: 3px solid #B39DDB;
   border-radius: 20px;
+  font-family: 'SeoulHangang';
+  font-style: normal;
+  font-size: 18px;
 `;
 
 const ButtonBox = styled.button`

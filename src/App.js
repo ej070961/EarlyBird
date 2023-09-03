@@ -6,6 +6,7 @@ import LoginPage from "./Components/views/LoginPage/LoginPage";
 import RegisterPage from "./Components/views/RegisterPage/RegisterPage";
 import MyPage from "./Components/views/MyPage/MyPage";
 import PostDetail from "./Components/views/PostDetail/PostDetail";
+import FlockDetail from "./Components/views/FlockPage/FlockDetail";
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/my-page" element={<MyPage />} />
           <Route path="/post/:postId" element={<PostDetail/>}/>
-       
+          <Route path="/flock/:flockId" element={<FlockDetail/>}/>
         </Routes>
 
     </BrowserRouter>

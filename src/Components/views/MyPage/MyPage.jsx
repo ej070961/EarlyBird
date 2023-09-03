@@ -29,7 +29,8 @@ function MyPage() {
     <div>
         <NavBar/>
         <MyPageLayout>
-          <div style={{ width: '90%', margin: '20px', display: 'flex', flexDirection: 'inline', justifyContent:'space-between'}}>
+          <StyledLayout>
+          
             <UserInfoLayout>
               <img src={currentUser.Image!==""? currentUser.Image:'/default_profile.png' } alt='' height={300} width={300} ></img>
               <div style={{display: 'flex', flexDirection: 'column', justifyContent:'space-between'}}>
@@ -42,9 +43,12 @@ function MyPage() {
                 {modalIsOpen && <ReviseInfo onClose={setModalIsOpen} UserData={currentUser}/>} 
               </div>
             </UserInfoLayout>
+
             <TodoList/>
+           
+            </StyledLayout>
             
-          </div>
+     
           <h1>My Daily Records</h1>
           <Calendar currentUser={currentUser}/>
           <h1>My Post Lists</h1>
@@ -85,7 +89,7 @@ const MyPageLayout = styled.div`
 
 
 const UserInfoLayout = styled.div`
-  width: 50%;
+  width: 800px;
   height: 300px;
   border-radius: 180px;
   border: 4px solid #B39DDB;
@@ -106,7 +110,7 @@ const UserInfoLayout = styled.div`
 `
 const ReviseButton = styled.button`
     box-sizing: border-box;
-    width: 240px;
+    width: 200px;
     height: 40px;
     background: #460A9A;
     border: 3px solid #460A9A;
@@ -120,6 +124,21 @@ const ReviseButton = styled.button`
     opacity: 0.8;
 
 `;
+
+
+const StyledLayout = styled.div`
+
+    width: 90%;
+    margin: 20px;
+    display: flex;
+    flex-direction: row; /* 원래는 inline이었던 부분을 row로 변경 */
+    justify-content: space-between;
+
+    @media (max-width: 768px) {
+      flex-direction: column; /* 작은 화면에서는 컬럼으로 변경 */
+    }
+
+    `
 
 
 

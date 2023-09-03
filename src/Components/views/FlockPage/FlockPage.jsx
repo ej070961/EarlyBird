@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import UploadFlock from '../UploadPage/UploadFlock';
 import styled from "styled-components";
 import NavBar from '../NavBar/NavBar';
-import ItemList from './ItemList';
+import ItemList from './Sections/ItemList';
 import Auth from '../../../hoc/auth'
 
 
@@ -21,8 +21,7 @@ function FlockPage() {
           {/* modalIsOpen값에 따라 UploadPost 컴포넌트가 조건적으로 렌더링됨 */}
         {modalIsOpen && <UploadFlock onClose={setModalIsOpen} />}
       </FlockContentRow>
-      <div style={{paddingTop:'60px', paddingLeft: '120px', paddingRight: '120px'}}>
-    
+      <div style={{paddingTop:'100px', paddingLeft: '120px', paddingRight: '120px'}}>
         <ItemList></ItemList>
       </div>
       
@@ -37,6 +36,7 @@ function FlockPage() {
     width: 100%;
     padding-top: 50px;
     background: #3D1365;
+    height: 100vh;
     opacity: 0.8;
   `
   const FlockContentRow = styled.div`
