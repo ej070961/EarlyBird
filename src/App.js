@@ -19,7 +19,9 @@ function App() {
           <Route path="/my-page" element={<MyPage />} />
           <Route path="/post/:postId" element={<PostDetail/>}/>
           <Route path="/flock/:flockId" element={<FlockDetail/>}/>
+          
         </Routes>
+        <footer>&copy; {new Date().getFullYear()} Early Bird </footer>
 
     </BrowserRouter>
   );
